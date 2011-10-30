@@ -92,6 +92,7 @@ if !exists("g:pandoc_no_empty_implicits") || !g:pandoc_no_empty_implicits
 " implicit reference links.
 python <<EOF
 import re
+import vim
 ref_label_pat = "^\s?\[.*(?=]:)"
 labels = []
 for line in vim.current.buffer:
