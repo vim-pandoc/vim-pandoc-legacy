@@ -80,7 +80,7 @@ files, add
 
 to your `.vimrc`.
 
-*pandoc-writing-enviroment*
+*pandoc-writing-environment*
 ===========================
 
 The bundle sets the following options, in an effort to provide a
