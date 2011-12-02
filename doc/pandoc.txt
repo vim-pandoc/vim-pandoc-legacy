@@ -43,7 +43,7 @@ Then run
 
     vimmer install https://github.com/vim-pandoc/vim-pandoc.git
 
-Either way, this install the bleeding edge development version
+Either way, this will install the bleeding edge development version
 of the plugin. If you want something more stable,
 
     cd ~/.vim/bundle/vim-pandoc
@@ -168,7 +168,7 @@ If you use |snipMate|, take a look at snippets/pandoc.snippets to see what
 is available. Here are a couple of examples:
 
 -   type `%%<TAB>` to generate a title block, with the filename as
-    title, the value of `g:snips-author` as author, and the current
+    title, the value of `g:snips_author` as author, and the current
     date.
 -   type `[*<TAB>` to generate an inline link with the contents of the clipboard
     as the url.
