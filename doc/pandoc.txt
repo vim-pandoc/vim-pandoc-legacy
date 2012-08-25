@@ -28,13 +28,21 @@ There are many different ways to manage and install vim plugins. Use
 your favorite method. If you don't have a favorite method, we recommend
 using [Pathogen][].
 
-Once you have Pathogen installed, clone this epository into your
-``~/.vim/bundle` directory,
+Once you have Pathogen installed, clone this repository into your
+`~/.vim/bundle` directory,
 
     cd ~/.vim/bundle
     git clone git@github.com:vim-pandoc/vim-pandoc.git
 
-Or, if that seems too complicated, install Pathogen and then install
+If you are already using git to syncronize your vim files and want to
+add this repository as a submodule instead, (see
+[this](http://vimcasts.org/episodes/synchronizing-plugins-with-git-submodules-and-pathogen/)
+for more information)
+
+    cd ~/.vim
+    git submodule add https://github.com/vim-pandoc/vim-pandoc.git bundle/vim-pandoc
+
+Or, if those seem too complicated, install Pathogen and then install
 [Vimmer][], a ruby gem for managing vim plugins, with
 
     gem install vimmer
