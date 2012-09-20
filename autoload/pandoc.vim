@@ -39,7 +39,7 @@ function! pandoc#Pandoc_Find_Bibfile()
 python<<EOF
 import vim
 import os
-from os.path import exists, relpath, expandvars, isdir
+from os.path import exists, relpath, expanduser, expandvars, isdir
 from glob import glob
 from subprocess import Popen, PIPE
 
@@ -78,7 +78,9 @@ if bibfiles == [] and vim.eval("executable('kpsewhich')") != '0':
 if vim.eval("exists('g:pandoc_bibfiles')") != "0":
 	bibfiles.extend(vim.eval("g:pandoc_bibfiles"))
 
-# we check if the items in bibfiles are readable and not directories
+# we expand file paths, and
+# check if the items in bibfiles are readable and not directories
+bibfiles = list(map(lambda f : expanduser(expandvars(f)), bibfiles))
 bibfiles = list(filter(lambda f : os.access(f, os.R_OK) and not isdir(f), bibfiles))
 
 vim.command("let b:pandoc_bibfiles = " + str(bibfiles))

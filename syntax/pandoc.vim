@@ -126,7 +126,7 @@ syn match pandocFootnoteID /\[\^.\{-}\]/ contained containedin=pandocFootnoteBlo
 syn match pandocPCite /\[-\{0,1}@.\{-}\]/ contains=pandocEmphasis,pandocStrong,pandocLatex,@Spell
 " syn match pandocPCite /\[\w.\{-}\s-\?.\{-}\]/ contains=pandocEmphasis,pandocStrong
 " in-text citations without location
-syn match pandocPCite /@\w*/
+syn match pandocPCite /@\%[\w\-]*/
 " in-text citations with location
 syn match pandocPCite /@\w*\s\[.\{-}\]/
 
@@ -162,15 +162,15 @@ syn region pandocNoFormatted start=/``[^`]*/ end=/``\|^\s*$/ contained
 endif
 
 " Subscripts:
-syn match pandocSubscript /\~\([^\~\\ ]\|\(\\ \)\)\+\~/ contains=@Spell 
+syn match pandocSubscript /\~\([^\~\\ ]\|\(\\ \)\)\+\~/ contains=@Spell
 
 """""""""""""""""""""""""""""""""""""""
 " Superscript:
-syn match pandocSuperscript /\^\([^\^\\ ]\|\(\\ \)\)\+\^/ contains=@Spell 
+syn match pandocSuperscript /\^\([^\^\\ ]\|\(\\ \)\)\+\^/ contains=@Spell
 
 """""""""""""""""""""""""""""""""""""""
 " Strikeout:
-syn match pandocStrikeout /\~\~[^\~ ]\([^\~]\|\~ \)*\~\~/ contains=@Spell 
+syn match pandocStrikeout /\~\~[^\~ ]\([^\~]\|\~ \)*\~\~/ contains=@Spell
 
 """""""""""""""""""""""""""""""""""""""""""""""
 " List Items:
