@@ -116,7 +116,7 @@ setlocal omnifunc=pandoc#Pandoc_Complete
 " # Supertab support
 "
 if exists("g:SuperTabDefaultCompletionType")
-	call SuperTabSetDefaultCompletionType("context")
+	let g:SuperTabDefaultCompletionType = "context"
 
 	if exists('g:SuperTabCompletionContexts')
 		let b:SuperTabCompletionContexts =
