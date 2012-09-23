@@ -33,6 +33,8 @@ else
 	setlocal formatoptions=1
 	setlocal linebreak
 	setlocal breakat-=*
+        setlocal wrap     " soft wrap doesn't make sense without it
+        setlocal nolist   " linebreak doesn't work if list is on
 	"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 	" Remappings that make j and k behave properly with
 	" soft wrapping.
@@ -40,6 +42,14 @@ else
 	nnoremap <buffer> k gk
 	vnoremap <buffer> j gj
 	vnoremap <buffer> k gk
+	
+	" same goes for 0, ^ and $
+	nnoremap <buffer> 0 g0
+	nnoremap <buffer> ^ g^
+	nnoremap <buffer> $ g$
+	vnoremap <buffer> 0 g0
+	vnoremap <buffer> ^ g^
+	vnoremap <buffer> $ g$
 
 	"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 	" Show partial wrapped lines
