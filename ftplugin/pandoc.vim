@@ -134,7 +134,7 @@ if exists("g:SuperTabDefaultCompletionType")
 " items (since one commonly types something like `+<tab>` to
 " create a list.)
 "
-let b:SuperTabNoCompleteAfter = ['\s', '^\s*\(-\|\*\|+\|>\|:\)', '^\s*(\=\d\+\(\.\=\|)\=\)']
+let b:SuperTabNoCompleteAfter = ['^', '\s', '^\s*\(-\|\*\|+\|>\|:\)', '^\s*(\=\d\+\(\.\=\|)\=\)']
 endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " # Commands that call Pandoc
