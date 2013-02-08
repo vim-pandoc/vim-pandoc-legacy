@@ -74,7 +74,10 @@ setlocal nojoinspaces
 " :MarkdownTidy on a portion of your file, it will insert unwanted title
 " blocks...)
 "
-setlocal equalprg=pandoc\ -t\ markdown\ --reference-links
+let &l:equalprg="pandoc -t markdown --reference-links"
+if &textwidth > 0
+    let &l:equalprg.=" --columns " . &textwidth
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " HTML style comments
