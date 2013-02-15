@@ -34,8 +34,8 @@ syn include @LATEX syntax/tex.vim
 " Single Tex command
 syn match pandocLatex /\\\w\S/ contains=@LATEX
 " Math Tex
-syn match pandocLatex /\$.\{-}\S\$/ contains=@LATEX
-
+syn match pandocLatex /\$.\{-}\$/ contains=@LATEX
+syn match pandocLatex /^\$\n\_.\{-}\$\n/ contains=@LATEX
 
 if !exists("g:pandoc_no_spans") || !g:pandoc_no_spans
 syn match pandocPara /\(^\(=\|[-:#%>]\|\[.\{-}\]:\)\@!\(\S.*\)\n\)\(\(^[=-].*\n\)\|\(^[:].*\n\)\)\@!/ contains=pandocEmphasis,pandocStrong,pandocNoFormatted,pandocSuperscript,pandocSubscript,pandocStrikeout,pandocLinkArea,pandocFootnoteID,@Spell,pandocPCite,pandocLatex
