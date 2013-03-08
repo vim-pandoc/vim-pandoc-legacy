@@ -33,7 +33,7 @@ If using Vundle, add
 
     Bundle 'vim-pandoc/vim-pandoc'
 
-to your `~/.vimrc` file.
+to your `~/.vimrc` file and run `:BundleInstall`.
 
 If using Pathogen,
 
