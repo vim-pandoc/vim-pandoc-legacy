@@ -1,77 +1,56 @@
-#
-# Snipmate Snippets for Pandoc Markdown
-#
-# Many snippets have starred versions, i.e., versions
-# that end with an asterisk (`*`). These snippets use
-# vim's `"*` register---i.e., the contents of the 
-# system clipboard---to insert text.
+extends mkd
 
-# Insert Title Block
-snippet %%
-	% ${1:`Filename('', 'title')`}
-	% ${2:`g:snips_author`}
-	% ${3:`strftime("%d %B %Y")`}
+snippet %% "Title block" b
+% ${1:`!v Filename('', 'title')`}
+% ${2:`!v g:snips_author`}
+% ${3:`!v strftime("%d %b %Y")`}
+$0
+endsnippet
 
-	${4}
-snippet %%*
-	% ${1:`Filename('', @*)`}
-	% ${2:`g:snips_author`}
-	% ${3:`strftime("%d %b %Y")`}
+snippet %%v "Title block" b
+% ${VISUAL:`!v Filename('', 'title')`}
+% ${2:`!v g:snips_author`}
+% ${3:`!v strftime("%d %b %Y")`}
+$0
+endsnippet
 
-	${4}
+snippet :: "Definition" b
+${1:term}
+  ~  ${2:definition}
+endsnippet
 
-# Insert Definition List
-snippet ::
-	${1:term}
-	  ~  ${2:definition}
-
-# Underline with `=`s or `-`s
 snippet ===
-	`repeat('=', strlen(getline(line(".") - 1)))`
-	
-	${1}
-snippet ---
-	`repeat('-', strlen(getline(line(".") - 1)))`
-	
-	${1}
+`!p
+snip.rv = '=' * len(vim.current.buffer[vim.current.window.cursor[0] - 2])
+`
+endsnippet
 
-# Links and their kin
-# -------------------
-#
-# (These don't play very well with delimitMate)
-#
+snippet ---
+`!p
+snip.rv = '-' * len(vim.current.buffer[vim.current.window.cursor[0] - 2])
+`
+endsnippet
 
 snippet [
-	[${1:link}](http://${2:url} "${3:title}")${4}
-snippet [*
-	[${1:link}](${2:`@*`} "${3:title}")${4}
+[${1:link}](http://${2:url} "${3:title}")$0
+endsnippet
 
 snippet [:
-	[${1:id}]: http://${2:url} "${3:title}"
-snippet [:*
-	[${1:id}]: ${2:`@*`} "${3:title}"
+[${1:id}]: http://${2:url} "${3:title}"
+endsnippet
 
 snippet [@
-	[${1:link}](mailto:${2:email})${3}
-snippet [@*
-	[${1:link}](mailto:${2:`@*`})${3}
-
-snippet [:@
-	[${1:id}]: mailto:${2:email} "${3:title}"
-snippet [:@*
-	[${1:id}]: mailto:${2:`@*`} "${3:title}"
+[${1:link}](mailto:${2:email})${3}
+endsnippet
 
 snippet ![
-	![${1:alt}](${2:url} "${3:title}")${4}
-snippet ![*
-	![${1:alt}](${2:`@*`} "${3:title}")${4}
+![${1:alt}](${2:url} "${3:tirle}")$0
+endsnippet
 
 snippet ![:
-	![${1:id}]: ${2:url} "${3:title}"
-snippet ![:*
-	![${1:id}]: ${2:`@*`} "${3:title}"
+![${1:id}]: ${2:url} "${3:title}"
+endsnippet
 
 snippet [^:
-	[^${1:id}]: ${2:note}
-snippet [^:*
-	[^${1:id}]: ${2:`@*`}
+[^${1:id}]: ${2:note}
+endsnippet
