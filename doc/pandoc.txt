@@ -453,7 +453,7 @@ reference-style link and its definition:
 to try this out on this document, and you are reading this within vim,
 first
 
-    :set maplocalleader = ","
+    :let maplocalleader = ","
     :set ft=pandoc
 
 then move your cursor [somewhere in here][], and type `,gr`. Wasn't that
