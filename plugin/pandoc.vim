@@ -1,3 +1,11 @@
+" Load? {{{1
+if exists("g:loaded_pandoc") || &cp
+	finish
+endif
+let g:loaded_pandoc = 1
+" }}}1
+
+
 if has("python") == 1
 python<<EOF
 # We register openers with PandocRegisterExecutor. 
