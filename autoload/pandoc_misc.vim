@@ -123,3 +123,11 @@ if label_regex != '':
 			break
 EOL
 endfunction
+
+function! pandoc_misc#Toggle_Tex_Syntax()
+  if (&syntax == 'pandoc')
+    setf tex
+  else
+    setf pandoc
+  endif
+endfunction

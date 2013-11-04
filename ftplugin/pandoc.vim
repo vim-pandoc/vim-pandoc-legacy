@@ -98,6 +98,12 @@ if !exists("g:pandoc_no_folding") || !g:pandoc_no_folding
 endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" # Tex syntax switching
+"
+" Since mixed syntax highlighting is so painful, swap modes instead
+map <buffer><silent> <localleader>s :call pandoc_misc#Toggle_Tex_Syntax()<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " # Voom support
 "
 if exists(":Voom")

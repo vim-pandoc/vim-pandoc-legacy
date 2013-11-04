@@ -34,7 +34,7 @@ syn include @LATEX syntax/tex.vim
 " Single Tex command
 syn match pandocLatex /\\\w\S/ contains=@LATEX
 " Math Tex
-syn match pandocLatex /\$.\{-}\S\$/ contains=@LATEX
+syn match pandocLatex /\$.\{-}\$/ contains=@LATEX
 
 
 if !exists("g:pandoc_no_spans") || !g:pandoc_no_spans
