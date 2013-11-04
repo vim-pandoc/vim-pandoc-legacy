@@ -85,8 +85,9 @@ if vim.eval("exists('g:pandoc_bibfiles')") != "0":
 
 # we expand file paths, and
 # check if the items in bibfiles are readable and not directories
-bibfiles = list(map(lambda f : expanduser(expandvars(f)), bibfiles))
-bibfiles = list(filter(lambda f : os.access(f, os.R_OK) and not isdir(f), bibfiles))
+if bibfiles != []:
+	bibfiles = list(map(lambda f : expanduser(expandvars(f)), bibfiles))
+	bibfiles = list(filter(lambda f : os.access(f, os.R_OK) and not isdir(f), bibfiles))
 
 vim.command("let b:pandoc_bibfiles = " + str(bibfiles))
 EOF
