@@ -38,14 +38,18 @@ def pandoc_execute(command, output_type="html", open_when_done=False):
 	out = splitext(vim.current.buffer.name)[0] + "." + output_type
 
 	# now, we run the pipe
-	procs = {}
-	procs[0] = Popen(shlex.split(steps[0]), stdout=PIPE)
-	if len(steps) > 1:
-		i = 1
-		for p in steps[1:]:
-			procs[i] = Popen(shlex.split(p), stdin=procs[i-1].stdout, stdout=PIPE)
-			procs[i-1].stdout.close()
-	output = procs[len(procs) - 1].communicate()[0]
+	try:
+	    procs = {}
+	    procs[0] = Popen(shlex.split(steps[0]), stdout=PIPE)
+	    if len(steps) > 1:
+		    i = 1
+		    for p in steps[1:]:
+			    procs[i] = Popen(shlex.split(p), stdin=procs[i-1].stdout, stdout=PIPE)
+			    procs[i-1].stdout.close()
+	    output = procs[len(procs) - 1].communicate()[0]
+	except:
+	    vim.command('echoe "could not run executor.')
+	    return
 
 	# we create a temporary buffer where the command and its output will be shown
 	
