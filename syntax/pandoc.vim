@@ -111,12 +111,12 @@ syn region pandocCodeBlockInsideIndent   start=/\(\(\d\|\a\|*\).*\n\)\@<!\(^\(\s
 "}}}
 
 " Links: {{{1
-"
 syn region pandocReferenceLabel matchgroup=Operator start=/!\{,1}\[/ skip=/\]\]\@=/ end=/\]/ keepend
 syn region pandocReferenceURL matchgroup=Operator start=/\]\@<=(/ end=/)/ keepend
 syn match pandocLinkTip /\s*".\{-}"/ contained containedin=pandocReferenceURL contains=@Spell
 exe 'syn match pandocImageIcon /!\[\@=/ conceal cchar='. s:cchars["image"]
 " }}}
+
 " Definitions: {{{2
 syn region pandocReferenceDefinition start=/\[.\{-}\]:/ end=/\(\n\s*".*"$\|$\)/ keepend
 syn match pandocReferenceDefinitionLabel /\[\zs.\{-}\ze\]:/ contained containedin=pandocReferenceDefinition
@@ -287,8 +287,11 @@ syn match pandocEndQuote /\(\>\|[[:punct:]]\)\@<="/ conceal cchar=”
 
 " YAML: {{{1
 
-unlet b:current_syntax
-syn include @YAML colors/yaml.vim
+try
+    unlet b:current_syntax
+    syn include @YAML colors/yaml.vim
+catch /E484/
+endtry
 syn region pandocYAMLHeader matchgroup=Delimiter start=/\%^\-\-\-/ end=/\-\-\-/ contains=@YAML 
 "}}}
 
