@@ -44,25 +44,31 @@ endif
 " for what languages and using what vim syntax files highlight those embeds
 " defaults to None.
 if !exists("g:pandoc_use_embeds_in_codeblocks_for_langs")
-    let g:pandoc_use_embeds_in_codeblocks_for_langs = {}
+    let g:pandoc_use_embeds_in_codeblocks_for_langs = []
 endif
 "}}}
 " }}}
 
 " Functions: {{{1
-function! EnableEmbedsforCodeblocksWithLang(langname, langsyntaxfile) 
+function! EnableEmbedsforCodeblocksWithLang(entry)
+    let s:langname = matchstr(a:entry, "^[^=]*")
+    let s:langsyntaxfile = matchstr(a:entry, "[^=]*$")
     unlet b:current_syntax
-    exe 'syn include @'.toupper(langname).' syntax/'.g:pandoc_use_embeds_in_codeblocks_for_langs[langname].'.vim'
-    exe "syn region pandocDelimitedCodeBlock_" . langname . ' start=/\(\_^\(\s\{4,}\)\=\(`\{3,}`*\|\~\{3,}\~*\).*' . langname . '.*\n\)\@<=\_^/' .
+    exe 'syn include @'.toupper(s:langname).' syntax/'.s:langsyntaxfile.'.vim'
+    exe "syn region pandocDelimitedCodeBlock_" . s:langname . ' start=/\(\_^\(\s\{4,}\)\=\(`\{3,}`*\|\~\{3,}\~*\).*' . s:langname . '.*\n\)\@<=\_^/' .
 	  \' end=/\_$\n\(\(`\{3,}`*\|\~\{3,}\~*\)\_$\n\_$\)\@=/ contained containedin=pandocDelimitedCodeBlock' .
-	  \' contains=@' . toupper(langname)
-    exe 'hi link pandocDelimitedCodeBlock_'.langname.' pandocDelimitedCodeBlock'
+	  \' contains=@' . toupper(s:langname)
+    exe 'hi link pandocDelimitedCodeBlock_'.s:langname.' pandocDelimitedCodeBlock'
 endfunction
 
 function! DisableEmbedsforCodeblocksWithLang(langname)
-    exe 'syn clear pandocDelimitedCodeBlock_'.langname
-    exe 'hi clear pandocDefinitionBlock_'.langname
+    exe 'syn clear pandocDelimitedCodeBlock_'.a:langname
+    exe 'hi clear pandocDefinitionBlock_'.a:langname
 endfunction
+
+command! -buffer -nargs=1 -complete=syntax PandocHighlight call EnableEmbedsforCodeblocksWithLang(<f-args>)
+command! -buffer -nargs=1 -complete=syntax PandocUnhighlight call DisableEmbedsforCodeblocksWithLang(<f-args>)
+
 " }}}
 
 " BASE: {{{1
@@ -93,7 +99,7 @@ syn match pandocLatex /\$.\{-}\$/ contains=@LATEX
 
 " Titleblock: {{{1
 "
-syn region pandocTitleBlock start=/\%^%/ end=/\n\n/ contains=pandocLinkArea,pandocNewLine
+syn region pandocTitleBlock start=/\%^%/ end=/\n\n/ contains=pandocReferenceLabel,pandocReferenceURL,pandocNewLine
 syn match pandocTitleBlockMark /%\ / contained containedin=pandocTitleBlock,pandocTitleBlockTitle conceal
 syn match pandocTitleBlockTitle /\%^%.*\n/ contained containedin=pandocTitleBlock
 "}}}
@@ -111,12 +117,12 @@ syn region pandocCodeBlockInsideIndent   start=/\(\(\d\|\a\|*\).*\n\)\@<!\(^\(\s
 "}}}
 
 " Links: {{{1
+"
 syn region pandocReferenceLabel matchgroup=Operator start=/!\{,1}\[/ skip=/\]\]\@=/ end=/\]/ keepend
 syn region pandocReferenceURL matchgroup=Operator start=/\]\@<=(/ end=/)/ keepend
 syn match pandocLinkTip /\s*".\{-}"/ contained containedin=pandocReferenceURL contains=@Spell
 exe 'syn match pandocImageIcon /!\[\@=/ conceal cchar='. s:cchars["image"]
 " }}}
-
 " Definitions: {{{2
 syn region pandocReferenceDefinition start=/\[.\{-}\]:/ end=/\(\n\s*".*"$\|$\)/ keepend
 syn match pandocReferenceDefinitionLabel /\[\zs.\{-}\ze\]:/ contained containedin=pandocReferenceDefinition
@@ -199,18 +205,15 @@ syn match pandocCodePre /<pre>.\{-}<\/pre>/ skipnl
 syn match pandocCodePre /<code>.\{-}<\/code>/ skipnl
 
 " enable highlighting for embedded region in codeblocks if there exists a
-" g:pandoc_use_embeds_in_codeblocks_for_langs *dictionary*.
+" g:pandoc_use_embeds_in_codeblocks_for_langs *list*.
 "
-" keys in this dictionary are the language code interpreted by pandoc, and
-" values are the names of the corresponding vim syntax files, without the
-" extension (sometimes they don't match). E.g,
-"
-" let g:pandoc_use_embeds_in_codeblocks_for_langs = {
-"	    \ "literatehaskell": "lhaskell" }
+" entries in this list are the language code interpreted by pandoc,
+" if this differs from the name of the vim syntax file, append =vimname
+" e.g. let g:pandoc_use_embeds_in_codeblocks_for_langs = ["haskell", "literatehaskell=lhaskell"]
 "
 if g:pandoc_use_embeds_in_codeblocks != 0
-    for l in keys(g:pandoc_use_embeds_in_codeblocks_for_langs)
-	call EnableEmbedsforCodeblocksWithLang(l, g:pandoc_use_embeds_in_codeblocks_for_langs[l])
+    for l in g:pandoc_use_embeds_in_codeblocks_for_langs
+      call EnableEmbedsforCodeblocksWithLang(l)
     endfor
 endif
 " }}}
@@ -228,12 +231,12 @@ syn match pandocAbbreviationTail /\]/ contained containedin=pandocAbbreviation c
 "
 syn match pandocFootnoteID /\[\^[^\]]\+\]/ nextgroup=pandocFootnoteDef
 "   Inline footnotes
-syn region pandocFootnoteDef start=/\^\[/ end=/\]/ contains=pandocLinkArea,pandocLatex,pandocPCite,@Spell skipnl keepend 
+syn region pandocFootnoteDef start=/\^\[/ end=/\]/ contains=pandocReferenceLabel,pandocReferenceURL,pandocLatex,pandocPCite,@Spell skipnl keepend 
 exe 'syn match pandocFootnoteDefHead /\^\[/ contained containedin=pandocFootnoteDef conceal cchar='.s:cchars["footnote"]
 syn match pandocFootnoteDefTail /\]/ contained containedin=pandocFootnoteDef conceal
 
 " regular footnotes
-syn region pandocFootnoteBlock start=/\[\^.\{-}\]:\s*\n*/ end=/^\n^\s\@!/ contains=pandocLinkArea,pandocLatex,pandocPCite,pandocStrong,pandocEmphasis,pandocNoFormatted,pandocSuperscript,pandocSubscript,pandocStrikeout,@Spell skipnl
+syn region pandocFootnoteBlock start=/\[\^.\{-}\]:\s*\n*/ end=/^\n^\s\@!/ contains=pandocReferenceLabel,pandocReferenceURL,pandocLatex,pandocPCite,pandocStrong,pandocEmphasis,pandocNoFormatted,pandocSuperscript,pandocSubscript,pandocStrikeout,@Spell skipnl
 syn match pandocFootnoteBlockSeparator /:/ contained containedin=pandocFootnoteBlock
 syn match pandocFootnoteID /\[\^.\{-}\]/ contained containedin=pandocFootnoteBlock
 exe 'syn match pandocFootnoteIDHead /\[\^/ contained containedin=pandocFootnoteID conceal cchar='.s:cchars["footnote"]
@@ -242,7 +245,7 @@ syn match pandocFootnoteIDTail /\]/ contained containedin=pandocFootnoteID conce
 
 " Definitions: {{{1
 "
-syn region pandocDefinitionBlock start=/^.*\n\(^\s*\n\)*\s\{0,2}[:~]\(\~\{2,}\~*\)\@!/ skip=/\n\n\zs\s/ end=/\n\n/ contains=pandocDefinitionBlockMark,pandocDefinitionBlockTerm,pandocCodeBlockInsideIndent,pandocEmphasis,pandocStrong,pandocStrongEmphasis,pandocNoFormatted,pandocStrikeout,pandocSubscript,pandocSuperscript,pandocFootnoteID,pandocLinkArea,pandocAutomaticLink keepend 
+syn region pandocDefinitionBlock start=/^.*\n\(^\s*\n\)*\s\{0,2}[:~]\(\~\{2,}\~*\)\@!/ skip=/\n\n\zs\s/ end=/\n\n/ contains=pandocDefinitionBlockMark,pandocDefinitionBlockTerm,pandocCodeBlockInsideIndent,pandocEmphasis,pandocStrong,pandocStrongEmphasis,pandocNoFormatted,pandocStrikeout,pandocSubscript,pandocSuperscript,pandocFootnoteID,pandocReferenceURL,pandocReferenceLabel,pandocAutomaticLink keepend 
 syn match pandocDefinitionBlockTerm /^.*\n\(^\s*\n\)*\(\s*[:~]\)\@=/ contained contains=pandocNoFormatted,pandocEmphasis,pandocStrong
 exe 'syn match pandocDefinitionBlockMark /^\s*[:~]/ contained conceal cchar='.s:cchars["definition"]
 " }}}
