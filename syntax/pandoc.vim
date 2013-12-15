@@ -45,7 +45,7 @@ let s:cchars = {
 	    \"image": "▨", 
 	    \"super": "ⁿ", 
 	    \"sub": "ₙ", 
-	    \"strike": "!", 
+	    \"strike": "x̶", 
 	    \"atx": "§",  
 	    \"codelang": "λ",
 	    \"abbrev": "→",
@@ -75,6 +75,11 @@ if !exists("g:pandoc_use_embeds_in_codeblocks_for_langs")
     let g:pandoc_use_embeds_in_codeblocks_for_langs = []
 endif
 "}}}2
+" underline subscript, superscript and strikeout? {{{2
+if !exists("g:pandoc_underline_special_blocks")
+    let g:pandoc_underline_special_blocks = 1
+endif
+" }}}2
 " }}}
 
 " Functions: {{{1
@@ -143,10 +148,10 @@ syn region pandocHTMLComment start=/<!--/ end=/-->/
 " Unset current_syntax so the 2nd include will work
 unlet b:current_syntax
 syn include @LATEX syntax/tex.vim
-" Single Tex command
-"syn match pandocLatex /\\\w\S/ contains=@LATEX
-" Math Tex
-syn match pandocLatex /\$.\{-}\$/ contains=@LATEX
+syn match pandocLaTeXInlineMath /\$[[:graph:]]\@=.\{-}[[:graph:]]\@<=\$/ contains=@LATEX
+syn region pandocLaTeXMathBlock start=/\$\$/ end=/\$\$/ keepend contains=@LATEX 
+syn match pandocLaTeXCommand /\\[[:alpha:]]\+\(\({.\{-}}\)\=\(\[.\{-}\]\)\=\)*/ contains=@LATEX 
+syn region pandocLaTeXRegion start=/\\begin{\z(.\{-}\)}/ end=/\\end{\z1}/ keepend contains=@LATEX
 " }}}}
 " }}}
 
@@ -192,10 +197,10 @@ syn match pandocAutomaticLink /<\(https\{0,1}.\{-}\|.\{-}@.\{-}\..\{-}\)>/
 " parenthetical citations
 syn match pandocPCite /\[-\{0,1}@.\{-}\]/ contains=pandocEmphasis,pandocStrong,pandocLatex,@Spell
 " in-text citations without location
-syn match pandocPCite /@\w*/
+syn match pandocPCite /@[[:graph:]äëïöü]*/
 
 " in-text citations with location
-syn match pandocPCite /@\w*\s\[.\{-}\]/
+syn match pandocPCite /@[[:graph:]äëïöü]*\s\[.\{-}\]/
 syn match pandocPCiteAnchor /@/ contained containedin=pandocPCite
 " }}}
 
@@ -230,13 +235,16 @@ call s:WithConceal("block", 'syn region pandocNoFormatted matchgroup=Operator st
 call s:WithConceal("block", 'syn region pandocNoFormatted matchgroup=Operator start=/``/ end=/``/', 'concealends')
 "}}}
 " Subscripts: {{{2 
-call s:WithConceal("block", 'syn region pandocSubscript matchgroup=Operator start=/\~/ end=/\~/ contains=@Spell', 'concealends cchar='.s:cchars["sub"])
+syn region pandocSubscript start=/\~\(\([[:graph:]]\(\\ \)\=\)\{-}\~\)\@=/ end=/\~/ keepend
+call s:WithConceal("block", 'syn match pandocSubscriptMark /\~/ contained containedin=pandocSubscript', 'conceal cchar='.s:cchars["sub"])
 "}}}
 " Superscript: {{{2
-call s:WithConceal("block", 'syn region pandocSuperscript matchgroup=Operator start=/\^/ end=/\^/ contains=@Spell', 'concealends cchar='.s:cchars["super"])
+syn region pandocSuperscript start=/\^\(\([[:graph:]]\(\\ \)\=\)\{-}\^\)\@=/ skip=/\\ / end=/\^/ keepend
+call s:WithConceal("block", 'syn match pandocSuperscriptMark /\^/ contained containedin=pandocSuperscript', 'conceal cchar='.s:cchars["super"])
 "}}}
 " Strikeout: {{{2
-call s:WithConceal("block", 'syn region pandocStrikeout matchgroup=Operator start=/\~\~/ end=/\~\~/  contains=@Spell', 'concealends cchar='.s:cchars["strike"])
+syn region pandocStrikeout start=/\~\~/ end=/\~\~/ contains=@Spell keepend
+call s:WithConceal("block", 'syn match pandocStrikeoutMark /\~\~/ contained containedin=pandocStrikeout', 'conceal cchar='.s:cchars["strike"])
 " }}}
 " }}}
 
@@ -417,10 +425,14 @@ hi pandocStrongEmphasis gui=bold,italic cterm=bold,italic
 hi pandocStrongInEmphasis gui=bold,italic cterm=bold,italic
 hi pandocEmphasisInStrong gui=bold,italic cterm=bold,italic
 hi link pandocNoFormatted String
-hi pandocSubscript gui=underline cterm=underline
-hi pandocSuperscript gui=underline cterm=underline
-hi pandocStrikeout gui=underline cterm=underline
-
+hi link pandocSubscriptMark Operator
+hi link pandocSuperscriptMark Operator
+hi link pandocStrikeoutMark Operator
+if g:pandoc_underline_special_blocks == 1
+    hi pandocSubscript gui=underline cterm=underline
+    hi pandocSuperscript gui=underline cterm=underline
+    hi pandocStrikeout gui=underline cterm=underline
+endif
 hi link pandocNewLine Error
 "}}}
 
@@ -428,3 +440,4 @@ let b:current_syntax = "pandoc"
 
 syntax sync clear
 syntax sync minlines=100
+
