@@ -44,17 +44,17 @@ function! pandoc#Pandoc_Find_Bibfile()
 python<<EOF
 import vim
 import os
-from os.path import exists, relpath, expanduser, expandvars, isdir
+from os.path import exists, splitext, expanduser, expandvars, isdir
 from glob import glob
 from subprocess import Popen, PIPE
 
 bib_extensions = ["json", "ris", "mods", "biblates", "bib"]
 
 if vim.current.buffer.name != None:
-	file_name = ".".join(relpath(vim.current.buffer.name).split(".")[:-1])
+	file_name, ext = splitext(vim.current.buffer.name)
 
 	# first, we check for files named after the current file in the current dir
-	bibfiles = [f for f in glob(file_name + ".*") if f.split(".")[-1] in bib_extensions]
+	bibfiles = [f for f in glob(file_name + ".*") if splitext(f)[1] in bib_extensions]
 else:
 	bibfiles = []
 
