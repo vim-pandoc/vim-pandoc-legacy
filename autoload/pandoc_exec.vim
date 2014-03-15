@@ -48,7 +48,7 @@ def pandoc_execute(command, output_type="html", open_when_done=False):
 			    procs[i-1].stdout.close()
 	    output = procs[len(procs) - 1].communicate()[0]
 	except:
-	    vim.command('echoe "could not run executor.')
+	    vim.command('echoe "could not run executor."')
 	    return
 
 	# we create a temporary buffer where the command and its output will be shown
