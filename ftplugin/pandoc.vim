@@ -211,5 +211,5 @@ map <buffer><silent> <LocalLeader>br :call pandoc_misc#Pandoc_Back_From_Ref()<cr
 
 "" Add new reference link (or footnote link) after current paragraph. (This
 "" works better than the snipmate snippet for doing this.)
-map <buffer><silent> <LocalLeader>nr ya[o<CR><ESC>p$a:
+map <buffer><silent> <LocalLeader>nr ya[o<CR><ESC>0P$a:
 
