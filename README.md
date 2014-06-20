@@ -55,14 +55,14 @@ users should be able to do something similar.
 Configuration variables have been renamed. This is a rough guide of these
 changes. 
 
-1) `g:pandoc_use_hard_wraps`/`g:pandoc_use_soft_wraps` =>
+* `g:pandoc_use_hard_wraps`/`g:pandoc_use_soft_wraps` =>
    `g:pandoc#formatting#mode` = "h"/"s"
-2) `g:pandoc_auto_format` => `g:pandoc#formatting#mode` += "a"
-3) `g:pandoc_no_folding` => `g:pandoc#modules#disabled` = ["folding"]
-4) `g:pandoc_no_empty_implicits` => not available
-5) `g:pandoc_no_spans` => not available
-6) `g:pandoc_bibfiles` => `g:pandoc#biblio#bibs`
-7) `g:pandoc_use_bibtool` => `g:pandoc#biblio#use_bibtool`
+* `g:pandoc_auto_format` => `g:pandoc#formatting#mode` += "a"
+* `g:pandoc_no_folding` => `g:pandoc#modules#disabled` = ["folding"]
+* `g:pandoc_no_empty_implicits` => not available
+* `g:pandoc_no_spans` => not available
+* `g:pandoc_bibfiles` => `g:pandoc#biblio#bibs`
+* `g:pandoc_use_bibtool` => `g:pandoc#biblio#use_bibtool`
 
 Note the new vim-pandoc is much more configurable, and has a modular design.
 Please consult vim-pandoc's help file (`:he vim-pandoc`) for more information.
