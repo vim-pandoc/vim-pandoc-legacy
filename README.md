@@ -4,12 +4,12 @@ Provided support for pandoc in vim.
 
 The original vim-pandoc (available here) has been replaced by vim-pantondoc
 (now, vim-pandoc). All the users of the old vim-pandoc are suggested to move
-over the combo of the new [vim-pandoc][], [vim-pandoc-syntax][, and
+over the combo of the new [vim-pandoc][], [vim-pandoc-syntax][], and
 [vim-pandoc-after][]. vim-pandoc provides the writing environment setup,
 vim-pandoc-syntax provides the syntax file (and tests), and vim-pandoc-after
 support for third-party plugins (like ultisnips, unite, nrrwrgn, etc.).
 
-[vim-pantondoc]: https://github.com/vim-pandoc/vim-pantondoc
+[vim-pandoc]: https://github.com/vim-pandoc/vim-pandoc
 [vim-pandoc-syntax]: https://github.com/vim-pandoc/vim-pandoc-syntax
 [vim-pandoc-after]: https://github.com/vim-pandoc/vim-pandoc-after
 
